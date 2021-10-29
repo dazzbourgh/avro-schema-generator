@@ -1,9 +1,9 @@
-package org.jetbrains.plugins.template.listeners
+package com.github.dazzbourgh.avroschemageneratot.listeners
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import org.jetbrains.plugins.template.services.MyProjectService
+import com.github.dazzbourgh.avroschemageneratot.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
