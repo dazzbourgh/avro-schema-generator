@@ -1,18 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.dazzbourgh.avroschemageneratot</id>
-    <name>avro-schema-generatot</name>
+    <id>com.github.dazzbourgh.avroschemagenerator</id>
+    <name>avro-schema-generator</name>
     <vendor>dazzbourgh</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.dazzbourgh.avroschemageneratot.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.dazzbourgh.avroschemageneratot.services.MyProjectService"/>
+        <applicationService serviceImplementation="com.github.dazzbourgh.avroschemagenerator.services.MyApplicationService"/>
+        <projectService serviceImplementation="com.github.dazzbourgh.avroschemagenerator.services.MyProjectService"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.dazzbourgh.avroschemageneratot.listeners.MyProjectManagerListener"
+        <listener class="com.github.dazzbourgh.avroschemagenerator.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>

@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# avro-schema-generatot Changelog
+# avro-schema-generator Changelog
 
 ## [Unreleased]
 ### Added

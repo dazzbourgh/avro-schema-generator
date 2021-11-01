@@ -1,7 +1,7 @@
-package com.github.dazzbourgh.avroschemageneratot.services
+package com.github.dazzbourgh.avroschemagenerator.services
 
 import com.intellij.openapi.project.Project
-import com.github.dazzbourgh.avroschemageneratot.MyBundle
+import com.github.dazzbourgh.avroschemagenerator.MyBundle
 
 class MyProjectService(project: Project) {
 

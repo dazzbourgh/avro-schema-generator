@@ -1,4 +1,4 @@
-package com.github.dazzbourgh.avroschemageneratot
+package com.github.dazzbourgh.avroschemagenerator
 
 import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.psi.xml.XmlFile

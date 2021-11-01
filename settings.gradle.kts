@@ -1,1 +1,1 @@
-rootProject.name = "avro-schema-generatot"
+rootProject.name = "avro-schema-generator"

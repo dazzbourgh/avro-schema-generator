@@ -1,4 +1,4 @@
-package com.github.dazzbourgh.avroschemageneratot
+package com.github.dazzbourgh.avroschemagenerator
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

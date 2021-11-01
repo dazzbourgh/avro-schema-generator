@@ -120,3 +120,7 @@ tasks {
         channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
 }
+
+dependencies {
+    implementation("org.apache.avro:avro:1.10.2")
+}
