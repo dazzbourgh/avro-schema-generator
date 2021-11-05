@@ -1,10 +1,10 @@
 package com.github.dazzbourgh.avroschemagenerator.domain
 
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.TraverseModule
 import com.intellij.testFramework.UsefulTestCase
-import junit.framework.TestCase
 
 class TraverseFieldsKtTest : UsefulTestCase() {
-    private val typed = Typed<Class<*>> {
+    private val getType = GetType<Class<*>> {
         when (simpleName) {
             "boolean" -> BooleanType
             "byte" -> ByteType
@@ -16,21 +16,17 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             else -> ComplexType
         }
     }
-    private val typedGeneric = Typed<Class<*>> { StringType }
-    private val docNamed = Named<Class<*>> { simpleName }
-    private val namespaceNamed = Named<Class<*>> { packageName }
+    private val getTypeGeneric = GetGenericType<Class<*>> { StringType }
+    private val getDocName = GetDocName<Class<*>> { simpleName }
+    private val getNamespaceName = GetNamespaceName<Class<*>> { packageName }
     private val getProperties = GetProperties<Class<*>> { declaredFields.toList().map { it.type } }
     private val getPropertyNames = GetPropertyNames<Class<*>> { declaredFields.toList().map { it.name } }
 
-    private val runTest = { clazz: Class<*> ->
+
+    val runTest = { clazz: Class<*> ->
         traverseFields(
             clazz,
-            typed,
-            typedGeneric,
-            docNamed,
-            namespaceNamed,
-            getProperties,
-            getPropertyNames
+            TraverseModule(getType, getTypeGeneric, getDocName, getNamespaceName, getProperties, getPropertyNames)
         )
     }
 
@@ -44,7 +40,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(BooleanElement("b"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support Byte`() {
@@ -57,7 +53,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(ByteElement("b"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support Int`() {
@@ -70,7 +66,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(IntElement("i"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support Long`() {
@@ -83,7 +79,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(LongElement("l"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support Double`() {
@@ -96,7 +92,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(DoubleElement("d"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support String`() {
@@ -109,7 +105,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(StringElement("s"))
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support complex types`() {
@@ -130,7 +126,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                 )
             )
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     fun `test traverseFields should support repeated types`() {
@@ -145,6 +141,6 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                 RepeatedElement(StringElement("s"))
             )
         )
-        TestCase.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 }

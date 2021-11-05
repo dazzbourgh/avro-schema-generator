@@ -28,12 +28,20 @@ data class StringElement(val name: String) : PrimitiveElement()
 data class ComplexElement(val docName: String, val namespace: String, val name: String?, val elements: List<Element>) : Element()
 data class RepeatedElement(val element: Element) : Element()
 
-fun interface Typed<T> {
+fun interface GetType<T> {
     fun T.getPropertyType(): FieldType
 }
 
-fun interface Named<T> {
-    fun T.getName(): String
+fun interface GetGenericType<T> {
+    fun T.getGenericType(): FieldType
+}
+
+fun interface GetDocName<T> {
+    fun T.getDocName(): String
+}
+
+fun interface GetNamespaceName<T> {
+    fun T.getNamespaceName(): String
 }
 
 fun interface GetProperties<T> {

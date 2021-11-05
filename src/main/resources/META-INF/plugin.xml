@@ -5,6 +5,7 @@
     <vendor>dazzbourgh</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.dazzbourgh.avroschemagenerator.services.MyApplicationService"/>
