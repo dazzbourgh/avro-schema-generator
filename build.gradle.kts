@@ -122,5 +122,6 @@ tasks {
 }
 
 dependencies {
-    implementation("org.apache.avro:avro:1.10.2")
+    implementation("org.apache.avro:avro:1.11.0")
+    testImplementation("org.assertj:assertj-core:3.21.0")
 }

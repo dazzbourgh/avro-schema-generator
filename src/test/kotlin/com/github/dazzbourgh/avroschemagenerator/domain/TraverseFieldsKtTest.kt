@@ -1,6 +1,5 @@
 package com.github.dazzbourgh.avroschemagenerator.domain
 
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.TraverseModule
 import com.intellij.testFramework.UsefulTestCase
 
 class TraverseFieldsKtTest : UsefulTestCase() {
@@ -8,25 +7,36 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         when (simpleName) {
             "boolean" -> BooleanType
             "byte" -> ByteType
-            "int" -> IntType
+            "int" -> IntegerType
             "long" -> LongType
             "String" -> StringType
             "double" -> DoubleType
-            "Set", "List" -> RepeatedType
+            "Set", "List" -> StringType
             else -> ComplexType
         }
     }
-    private val getTypeGeneric = GetGenericType<Class<*>> { StringType }
     private val getDocName = GetDocName<Class<*>> { simpleName }
     private val getNamespaceName = GetNamespaceName<Class<*>> { packageName }
     private val getProperties = GetProperties<Class<*>> { declaredFields.toList().map { it.type } }
     private val getPropertyNames = GetPropertyNames<Class<*>> { declaredFields.toList().map { it.name } }
-
+    private val getMode = GetMode<Class<*>> {
+        when (this) {
+            List::class.java, Set::class.java -> Repeated
+            else -> Nullable
+        }
+    }
 
     val runTest = { clazz: Class<*> ->
-        traverseFields(
+        traverse(
             clazz,
-            TraverseModule(getType, getTypeGeneric, getDocName, getNamespaceName, getProperties, getPropertyNames)
+            DelegatingTraverseModule(
+                getType,
+                getDocName,
+                getNamespaceName,
+                getProperties,
+                getPropertyNames,
+                getMode
+            )
         )
     }
 
@@ -38,7 +48,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(BooleanElement("b"))
+            listOf(BooleanElement("b", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -51,7 +62,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(ByteElement("b"))
+            listOf(ByteElement("b", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -64,7 +76,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(IntElement("i"))
+            listOf(IntElement("i", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -77,7 +90,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(LongElement("l"))
+            listOf(LongElement("l", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -90,7 +104,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(DoubleElement("d"))
+            listOf(DoubleElement("d", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -103,7 +118,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "TestClass",
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
-            listOf(StringElement("s"))
+            listOf(StringElement("s", Nullable)),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -122,9 +138,11 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                     "ChildTestClass",
                     "com.github.dazzbourgh.avroschemagenerator.domain",
                     "c",
-                    listOf()
+                    listOf(),
+                    Nullable
                 )
-            )
+            ),
+            Nullable
         )
         assertEquals(expected, actual)
     }
@@ -138,8 +156,9 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "com.github.dazzbourgh.avroschemagenerator.domain",
             null,
             listOf(
-                RepeatedElement(StringElement("s"))
-            )
+                StringElement("s", Repeated)
+            ),
+            Nullable
         )
         assertEquals(expected, actual)
     }
