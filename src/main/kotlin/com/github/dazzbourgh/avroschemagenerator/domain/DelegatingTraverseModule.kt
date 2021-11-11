@@ -6,10 +6,12 @@ class DelegatingTraverseModule<T>(
     getNamespaceName: GetNamespaceName<T>,
     getProperties: GetProperties<T>,
     getPropertyNames: GetPropertyNames<T>,
-    getMode: GetMode<T>
+    getMode: GetMode<T>,
+    getDeclared: GetDeclared<T>
 ) : GetType<T> by getType,
     GetDocName<T> by getDocName,
     GetNamespaceName<T> by getNamespaceName,
     GetProperties<T> by getProperties,
     GetPropertyNames<T> by getPropertyNames,
-    GetMode<T> by getMode
+    GetMode<T> by getMode,
+    GetDeclared<T> by getDeclared

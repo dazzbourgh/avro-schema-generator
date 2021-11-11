@@ -6,26 +6,29 @@ fun <T, Traverse> traverse(clazz: T, traverse: Traverse, elementName: String? = 
               Traverse : GetType<T>,
               Traverse : GetProperties<T>,
               Traverse : GetPropertyNames<T>,
-              Traverse : GetMode<T> {
-    val getComplexElement = { name: String, field: T -> traverse(field, traverse, name) }
+              Traverse : GetMode<T>,
+              Traverse : GetDeclared<T> =
+    with(traverse) {
+        val getComplexElement =
+            { name: String, field: T -> traverse(field.getDeclared(), traverse, name) }
 
-    val docName = with(traverse) { clazz.getDocName() }
-    val namespace = with(traverse) { clazz.getNamespaceName() }
-    val fields = with(traverse) { clazz.getProperties() }
-    val fieldNames = with(traverse) { clazz.getPropertyNames() }
-    val mode = with(traverse) { clazz.getMode() }
+        val docName = clazz.getDocName()
+        val namespace = clazz.getNamespaceName()
+        val fields = clazz.getProperties()
+        val fieldNames = clazz.getPropertyNames()
+        val mode = clazz.getMode()
 
-    val elements = fieldNames.zip(fields).map { (name, field) ->
-        val type = with(traverse) { field.getPropertyType() }
-        val fieldMode = with(traverse) { field.getMode() }
-        when (type) {
-            is PrimitiveType -> getPrimitiveElement(name, type, fieldMode)
-            ComplexType -> getComplexElement(name, field)
+        val elements = fieldNames.zip(fields).map { (name, field) ->
+            val type = field.getPropertyType()
+            val fieldMode = field.getMode()
+            when (type) {
+                is PrimitiveType -> getPrimitiveElement(name, type, fieldMode)
+                ComplexType -> getComplexElement(name, field)
+            }
         }
-    }
 
-    return ComplexElement(docName, namespace, elementName, elements, mode)
-}
+        ComplexElement(docName, namespace, elementName, elements, mode)
+    }
 
 private fun getPrimitiveElement(name: String, type: PrimitiveType, mode: Mode): PrimitiveElement =
     when (type) {

@@ -6,6 +6,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.CharacterType
 import com.github.dazzbourgh.avroschemagenerator.domain.ComplexType
 import com.github.dazzbourgh.avroschemagenerator.domain.DoubleType
 import com.github.dazzbourgh.avroschemagenerator.domain.FloatType
+import com.github.dazzbourgh.avroschemagenerator.domain.GetDeclared
 import com.github.dazzbourgh.avroschemagenerator.domain.GetDocName
 import com.github.dazzbourgh.avroschemagenerator.domain.GetMode
 import com.github.dazzbourgh.avroschemagenerator.domain.GetNamespaceName
@@ -23,6 +24,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.get
 import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.isCollection
 import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.isGeneric
 import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.mapBoxedType
+import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
@@ -105,5 +107,7 @@ object PsiTraverse {
     val psiGetPropertyNames = GetPropertyNames<PsiElement> { getChildrenOfType<PsiField>().toList().map { it.name } }
 
     val psiGetMode = GetMode<PsiElement> { TODO() }
+
+    val psiGetDeclared = GetDeclared<PsiElement> { reference?.resolve()!! }
 }
 

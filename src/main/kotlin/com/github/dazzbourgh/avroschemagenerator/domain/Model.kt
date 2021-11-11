@@ -66,6 +66,10 @@ fun interface GetMode<T> {
     fun T.getMode(): Mode
 }
 
+fun interface GetDeclared<T> {
+    fun T.getDeclared(): T
+}
+
 val boxedTypeNames = setOf(
     "Boolean",
     "Byte",

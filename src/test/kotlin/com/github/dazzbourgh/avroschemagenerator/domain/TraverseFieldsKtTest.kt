@@ -25,6 +25,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             else -> Nullable
         }
     }
+    private val getDeclared = GetDeclared<Class<*>> { this }
 
     val runTest = { clazz: Class<*> ->
         traverse(
@@ -35,7 +36,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                 getNamespaceName,
                 getProperties,
                 getPropertyNames,
-                getMode
+                getMode,
+                getDeclared
             )
         )
     }

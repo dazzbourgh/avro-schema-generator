@@ -12,6 +12,8 @@ import com.github.dazzbourgh.avroschemagenerator.domain.ShortType
 import com.github.dazzbourgh.avroschemagenerator.domain.StringType
 import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverse.psiGetDocName
 import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverse.psiGetType
+import com.intellij.openapi.module.Module
+import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiClass
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import org.assertj.core.api.Assertions.assertThat
