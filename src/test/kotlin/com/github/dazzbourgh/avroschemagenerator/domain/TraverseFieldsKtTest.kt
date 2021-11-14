@@ -25,7 +25,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             else -> Nullable
         }
     }
-    private val getDeclared = GetDeclared<Class<*>> { this }
+    private val resolveElementReference = ResolveElementReference<Class<*>> { this }
 
     val runTest = { clazz: Class<*> ->
         traverse(
@@ -37,7 +37,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                 getProperties,
                 getPropertyNames,
                 getMode,
-                getDeclared
+                resolveElementReference
             )
         )
     }

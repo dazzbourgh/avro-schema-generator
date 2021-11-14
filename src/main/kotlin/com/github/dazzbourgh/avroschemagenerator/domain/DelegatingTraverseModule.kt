@@ -1,17 +1,17 @@
 package com.github.dazzbourgh.avroschemagenerator.domain
 
-class DelegatingTraverseModule<T>(
+open class DelegatingTraverseModule<T>(
     getType: GetType<T>,
     getDocName: GetDocName<T>,
     getNamespaceName: GetNamespaceName<T>,
     getProperties: GetProperties<T>,
     getPropertyNames: GetPropertyNames<T>,
     getMode: GetMode<T>,
-    getDeclared: GetDeclared<T>
+    resolveElementReference: ResolveElementReference<T>
 ) : GetType<T> by getType,
     GetDocName<T> by getDocName,
     GetNamespaceName<T> by getNamespaceName,
     GetProperties<T> by getProperties,
     GetPropertyNames<T> by getPropertyNames,
     GetMode<T> by getMode,
-    GetDeclared<T> by getDeclared
+    ResolveElementReference<T> by resolveElementReference

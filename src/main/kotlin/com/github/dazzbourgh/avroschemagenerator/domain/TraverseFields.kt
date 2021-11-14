@@ -1,22 +1,29 @@
 package com.github.dazzbourgh.avroschemagenerator.domain
 
-fun <T, Traverse> traverse(clazz: T, traverse: Traverse, elementName: String? = null): Element
+fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? = null): Element
         where Traverse : GetNamespaceName<T>,
               Traverse : GetDocName<T>,
               Traverse : GetType<T>,
               Traverse : GetProperties<T>,
+              // TODO: add GetName interface for T instead
               Traverse : GetPropertyNames<T>,
               Traverse : GetMode<T>,
-              Traverse : GetDeclared<T> =
+              Traverse : ResolveElementReference<T> =
     with(traverse) {
         val getComplexElement =
-            { name: String, field: T -> traverse(field.getDeclared(), traverse, name) }
+            { name: String, field: T ->
+                traverse(
+                    field.resolveElementReference() ?: TODO("References must resolve to non-null object"),
+                    traverse,
+                    name
+                )
+            }
 
-        val docName = clazz.getDocName()
-        val namespace = clazz.getNamespaceName()
-        val fields = clazz.getProperties()
-        val fieldNames = clazz.getPropertyNames()
-        val mode = clazz.getMode()
+        val docName = element.getDocName()
+        val namespace = element.getNamespaceName()
+        val fields = element.getProperties()
+        val fieldNames = element.getPropertyNames()
+        val mode = element.getMode()
 
         val elements = fieldNames.zip(fields).map { (name, field) ->
             val type = field.getPropertyType()

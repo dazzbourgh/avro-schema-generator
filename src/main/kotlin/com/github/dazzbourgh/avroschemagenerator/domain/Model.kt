@@ -20,6 +20,7 @@ object ComplexType : FieldType()
 sealed class Mode
 object Nullable : Mode()
 object Repeated : Mode()
+object NonNull : Mode()
 
 sealed class Element
 sealed class PrimitiveElement : Element()
@@ -66,8 +67,8 @@ fun interface GetMode<T> {
     fun T.getMode(): Mode
 }
 
-fun interface GetDeclared<T> {
-    fun T.getDeclared(): T
+fun interface ResolveElementReference<T> {
+    fun T.resolveElementReference(): T?
 }
 
 val boxedTypeNames = setOf(

@@ -2,7 +2,7 @@ import java.lang.Integer;
 import java.lang.String;
 import java.util.List;
 
-public class TypesTestClass {
+public class ResolveElementClass {
     private byte bytePrimitive;
     private short shortPrimitive;
     private int integerPrimitive;
@@ -25,6 +25,5 @@ public class TypesTestClass {
 
     private int[] arr;
     private List<Integer> list;
-
-    private SomeTestClass someTestClass;
+    private <caret>SomeTestClass someTestClass;
 }

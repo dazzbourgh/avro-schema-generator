@@ -1,12 +1,15 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.psi
 
 import com.github.dazzbourgh.avroschemagenerator.domain.PrimitiveType
+import com.github.dazzbourgh.avroschemagenerator.domain.ResolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverse.PsiResolveElementReference
+import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiReferenceParameterList
 import com.intellij.psi.PsiTypeElement
 import com.intellij.psi.impl.source.PsiClassReferenceType
+import com.intellij.psi.util.PsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import java.util.*
@@ -14,13 +17,31 @@ import java.util.*
 typealias ClassName = String
 
 object PsiTraverseUtils {
-    internal inline fun <reified T : PsiElement> PsiElement.getFirstDescendantOfType(): T? {
+    internal inline fun <reified T : PsiElement> PsiElement.getAllDescendantsOfType(): List<T> {
         val queue: Queue<PsiElement> = LinkedList()
+        val result = mutableListOf<T>()
         queue.add(this)
         while (!queue.isEmpty()) {
             val current = queue.remove()
+            if (current is T) result.add(current)
+            current.children.toList().forEach { queue.add(it) }
+        }
+        return result
+    }
+
+    internal inline fun <reified T : PsiElement> PsiElement.getFirstDescendantOfType(): T? =
+        search(this) { it.children.toList() }
+
+    internal inline fun <reified T : PsiElement> PsiElement.getFirstAscendantOfType(): T? =
+        search(this) { listOf(it.parent) }
+
+    private inline fun <reified T : S, reified S> search(element: S, getNextElements: (S) -> Iterable<S>): T? {
+        val queue: Queue<S> = LinkedList()
+        queue.add(element)
+        while (!queue.isEmpty()) {
+            val current = queue.remove()
             if (current is T) return current
-            else current.children.forEach { queue.add(it) }
+            else getNextElements(current).forEach { queue.add(it) }
         }
         return null
     }
@@ -37,7 +58,10 @@ object PsiTraverseUtils {
         return childrenQueue.reversed().firstOrNull { it is T } as T?
     }
 
-    internal fun mapBoxedType(psiType: PsiClassReferenceType, primitiveTypeSupplier: (ClassName) -> PrimitiveType?): PrimitiveType =
+    internal fun mapBoxedType(
+        psiType: PsiClassReferenceType,
+        primitiveTypeSupplier: (ClassName) -> PrimitiveType?
+    ): PrimitiveType =
         primitiveTypeSupplier(psiType.className)
             ?: throw IllegalArgumentException("Only boxed primitive types and String are supported")
 
@@ -48,14 +72,15 @@ object PsiTraverseUtils {
             ?.getChildrenOfType<PsiTypeElement>()
             ?.size ?: 0) > 0
 
-    internal fun isCollection(psiTypeElement: PsiTypeElement): Boolean =
-        psiTypeElement
-            .getChildOfType<PsiJavaCodeReferenceElement>()
-            ?.getChildOfType<PsiIdentifier>()
-            ?.let {
-                when (it.text) {
-                    "List", "Set", "Collection" -> true
-                    else -> false
-                }
-            } ?: false
+    fun PsiElement.isCollection(resolveElementReference: ResolveElementReference<PsiElement> = PsiResolveElementReference): Boolean =
+        when (this) {
+            is PsiClass ->
+                PsiUtil.getPackageName(this)?.contains("java.util") == true
+                        && extends("Collection")
+            is PsiTypeElement -> with(resolveElementReference) { resolveElementReference()?.isCollection() ?: false }
+            else -> TODO()
+        }
+
+    fun PsiClass.extends(parentClassName: String): Boolean =
+        extendsList?.referenceElements?.mapNotNull { it.referenceName }?.any { it == parentClassName } ?: false
 }
