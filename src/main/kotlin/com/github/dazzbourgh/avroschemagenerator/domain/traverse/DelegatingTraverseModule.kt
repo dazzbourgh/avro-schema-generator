@@ -1,6 +1,6 @@
-package com.github.dazzbourgh.avroschemagenerator.domain
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
-open class DelegatingTraverseModule<T>(
+class DelegatingTraverseModule<T>(
     getType: GetType<T>,
     getDocName: GetDocName<T>,
     getNamespaceName: GetNamespaceName<T>,

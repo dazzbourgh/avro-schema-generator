@@ -1,4 +1,4 @@
-package com.github.dazzbourgh.avroschemagenerator.domain
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
 import com.intellij.testFramework.UsefulTestCase
 

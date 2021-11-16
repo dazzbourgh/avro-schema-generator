@@ -1,37 +1,37 @@
-package com.github.dazzbourgh.avroschemagenerator.domain.psi
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi
 
-import com.github.dazzbourgh.avroschemagenerator.domain.BooleanType
-import com.github.dazzbourgh.avroschemagenerator.domain.ByteType
-import com.github.dazzbourgh.avroschemagenerator.domain.CharacterType
-import com.github.dazzbourgh.avroschemagenerator.domain.ComplexType
-import com.github.dazzbourgh.avroschemagenerator.domain.DelegatingTraverseModule
-import com.github.dazzbourgh.avroschemagenerator.domain.DoubleType
-import com.github.dazzbourgh.avroschemagenerator.domain.FieldType
-import com.github.dazzbourgh.avroschemagenerator.domain.FloatType
-import com.github.dazzbourgh.avroschemagenerator.domain.GetDocName
-import com.github.dazzbourgh.avroschemagenerator.domain.GetMode
-import com.github.dazzbourgh.avroschemagenerator.domain.GetNamespaceName
-import com.github.dazzbourgh.avroschemagenerator.domain.GetProperties
-import com.github.dazzbourgh.avroschemagenerator.domain.GetPropertyNames
-import com.github.dazzbourgh.avroschemagenerator.domain.GetType
-import com.github.dazzbourgh.avroschemagenerator.domain.IntegerType
-import com.github.dazzbourgh.avroschemagenerator.domain.LongType
-import com.github.dazzbourgh.avroschemagenerator.domain.Mode
-import com.github.dazzbourgh.avroschemagenerator.domain.NonNull
-import com.github.dazzbourgh.avroschemagenerator.domain.Nullable
-import com.github.dazzbourgh.avroschemagenerator.domain.PrimitiveType
-import com.github.dazzbourgh.avroschemagenerator.domain.Repeated
-import com.github.dazzbourgh.avroschemagenerator.domain.ResolveElementReference
-import com.github.dazzbourgh.avroschemagenerator.domain.ShortType
-import com.github.dazzbourgh.avroschemagenerator.domain.boxedTypeNames
-import com.github.dazzbourgh.avroschemagenerator.domain.boxedTypesMap
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverse.PsiResolveElementReference.resolveElementReference
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.getAllDescendantsOfType
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.getFirstDescendantOfType
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.getLastDescendantOfType
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.isCollection
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.isGeneric
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverseUtils.mapBoxedType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.BooleanType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ByteType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DelegatingTraverseModule
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FieldType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetDocName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetMode
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetNamespaceName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetProperties
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetPropertyNames
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.IntegerType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.LongType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Mode
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.NonNull
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Nullable
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.PrimitiveType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Repeated
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ResolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ShortType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.boxedTypeNames
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.boxedTypesMap
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference.resolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getAllDescendantsOfType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getFirstDescendantOfType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getLastDescendantOfType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isCollection
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isGeneric
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.mapBoxedType
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
@@ -155,7 +155,7 @@ object PsiTraverse {
             }
     }
 
-    object PsiTraverseModule : DelegatingTraverseModule<PsiElement>(
+    private val module = DelegatingTraverseModule(
         PsiGetType,
         PsiGetDocName,
         PsiGetNamespaceName,
@@ -164,4 +164,12 @@ object PsiTraverse {
         PsiGetMode(PsiGetType),
         PsiResolveElementReference
     )
+
+    object PsiTraverseModule : GetType<PsiElement> by module,
+        GetDocName<PsiElement> by module,
+        GetNamespaceName<PsiElement> by module,
+        GetProperties<PsiElement> by module,
+        GetPropertyNames<PsiElement> by module,
+        GetMode<PsiElement> by module,
+        ResolveElementReference<PsiElement> by module
 }

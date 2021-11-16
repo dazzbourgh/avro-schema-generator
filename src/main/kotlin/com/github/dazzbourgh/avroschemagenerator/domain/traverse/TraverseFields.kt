@@ -1,4 +1,4 @@
-package com.github.dazzbourgh.avroschemagenerator.domain
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
 fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? = null): Element
         where Traverse : GetNamespaceName<T>,

@@ -1,8 +1,8 @@
-package com.github.dazzbourgh.avroschemagenerator.domain.psi
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi
 
-import com.github.dazzbourgh.avroschemagenerator.domain.PrimitiveType
-import com.github.dazzbourgh.avroschemagenerator.domain.ResolveElementReference
-import com.github.dazzbourgh.avroschemagenerator.domain.psi.PsiTraverse.PsiResolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.PrimitiveType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ResolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaCodeReferenceElement
