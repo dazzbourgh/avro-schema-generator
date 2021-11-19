@@ -1,6 +1,10 @@
 import java.lang.Integer;
 import java.lang.String;
 import java.util.List;
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class TypesTestClass {
     private byte bytePrimitive;
@@ -22,6 +26,11 @@ public class TypesTestClass {
     private Boolean boolBoxed;
 
     private String string;
+
+    private BigInteger bigInteger;
+    private BigDecimal bigDecimal;
+    private LocalDateTime localDateTime;
+    private Date date;
 
     private int[] arr;
     private List<Integer> list;

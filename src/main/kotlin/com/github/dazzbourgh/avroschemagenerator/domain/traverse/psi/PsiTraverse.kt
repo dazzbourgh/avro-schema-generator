@@ -41,6 +41,7 @@ import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiTypeElement
+import com.intellij.psi.impl.source.PsiClassImpl
 import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
@@ -63,10 +64,10 @@ object PsiTraverse {
                                 }
                                 isGeneric(psiTypeElement) -> TODO("Generics are currently not supported")
                                 else -> {
-                                    val ref = with(PsiResolveElementReference) {
-                                        resolveElementReference()
-                                    }
+                                    val ref = with(PsiResolveElementReference) { resolveElementReference() }
                                     when {
+                                        ref?.let { it is PsiClassImpl && it.isInterface } == true ->
+                                            throw IllegalArgumentException("Data classes cannot contain interface fields")
                                         ref?.containingFile?.let { file ->
                                             ProjectFileIndex.getInstance(file.project).isInSource(file.virtualFile)
                                         } == true -> ComplexType

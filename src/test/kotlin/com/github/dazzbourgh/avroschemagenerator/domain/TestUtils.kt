@@ -41,6 +41,11 @@ object TestUtils {
 
                 StringElement("string", Nullable),
 
+                LongElement("bigInteger", Nullable),
+                DoubleElement("bigDecimal", Nullable),
+                DoubleElement("localDateTime", Nullable),
+                DoubleElement("date", Nullable),
+
                 IntElement("arr", Repeated),
                 IntElement("list", Repeated),
 

@@ -102,6 +102,38 @@ object PsiTraverseTest {
             assertThat(actual).containsExactlyElementsOf(expected)
         }
 
+        fun `test PsiGetType should support BigInteger, BigDecimal`() {
+            val clazz: PsiClass = file.getChildOfType()!!
+            val fields = listOf(
+                "bigInteger",
+                "bigDecimal"
+            ).map { clazz.findFieldByName(it, false)!! }
+            val expected = listOf(
+                LongType,
+                DoubleType
+            )
+
+            val actual = fields.map { with(PsiGetType) { it.getPropertyType() } }
+
+            assertThat(actual).containsExactlyElementsOf(expected)
+        }
+
+        fun `test PsiGetType should support LocalDateTime, Date`() {
+            val clazz: PsiClass = file.getChildOfType()!!
+            val fields = listOf(
+                "localDateTime",
+                "date"
+            ).map { clazz.findFieldByName(it, false)!! }
+            val expected = listOf(
+                DoubleType,
+                DoubleType
+            )
+
+            val actual = fields.map { with(PsiGetType) { it.getPropertyType() } }
+
+            assertThat(actual).containsExactlyElementsOf(expected)
+        }
+
         fun `test PsiGetType should support complex types`() {
             val clazz: PsiClass = file.getChildOfType()!!
             val fields = listOf("someTestClass").map { clazz.findFieldByName(it, false)!! }
@@ -110,10 +142,6 @@ object PsiTraverseTest {
             val actual = fields.map { with(PsiGetType) { it.getPropertyType() } }
 
             assertThat(actual).containsExactlyElementsOf(expected)
-        }
-
-        fun `test PsiGetType should throw for complex type interfaces`() {
-
         }
     }
 
@@ -144,6 +172,14 @@ object PsiTraverseTest {
         fun `test PsiGetType should throw for complex type outside source root`() {
             val clazz: PsiClass = myFixture.findClass("ClassWithComplexFieldOutsideSourceRoot")
             val field = clazz.findFieldByName("is", false)!!
+
+            assertThatThrownBy { with(PsiGetType) { field.getPropertyType() } }
+                .isInstanceOf(IllegalArgumentException::class.java)
+        }
+
+        fun `test PsiGetType should throw for fields of interface type`() {
+            val clazz: PsiClass = myFixture.javaFacade.findClass("ClassWithInterfaceField")
+            val field = clazz.findFieldByName("someInterface", false)!!
 
             assertThatThrownBy { with(PsiGetType) { field.getPropertyType() } }
                 .isInstanceOf(IllegalArgumentException::class.java)

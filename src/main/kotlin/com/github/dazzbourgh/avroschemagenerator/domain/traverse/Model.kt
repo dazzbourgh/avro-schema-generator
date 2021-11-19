@@ -71,7 +71,7 @@ fun interface ResolveElementReference<T> {
     fun T.resolveElementReference(): T?
 }
 
-val boxedTypeNames = setOf(
+val boxedTypeNames = listOf(
     "Boolean",
     "Byte",
     "Character",
@@ -80,9 +80,14 @@ val boxedTypeNames = setOf(
     "Long",
     "Short",
     "Double",
-    "String"
+    "String",
+    "BigInteger",
+    "BigDecimal",
+    "LocalDateTime",
+    "Date"
 )
-val boxedTypes = setOf(
+
+val boxedTypes = listOf(
     BooleanType,
     ByteType,
     CharacterType,
@@ -91,6 +96,11 @@ val boxedTypes = setOf(
     LongType,
     ShortType,
     DoubleType,
-    StringType
+    StringType,
+    LongType,
+    DoubleType,
+    DoubleType,
+    DoubleType
 )
+
 val boxedTypesMap = boxedTypeNames.zip(boxedTypes).toMap()

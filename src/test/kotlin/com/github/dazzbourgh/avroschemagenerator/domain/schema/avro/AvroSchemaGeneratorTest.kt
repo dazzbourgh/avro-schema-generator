@@ -33,6 +33,11 @@ internal class AvroSchemaGeneratorTest {
             //----------------
             .name("string").type().nullable().stringType().noDefault()
             //----------------
+            .name("bigInteger").type().nullable().longType().noDefault()
+            .name("bigDecimal").type().nullable().doubleType().noDefault()
+            .name("localDateTime").type().nullable().doubleType().noDefault()
+            .name("date").type().nullable().doubleType().noDefault()
+            //----------------
             .name("arr").type().array().items().intType().noDefault()
             .name("list").type().array().items().intType().noDefault()
             //----------------
