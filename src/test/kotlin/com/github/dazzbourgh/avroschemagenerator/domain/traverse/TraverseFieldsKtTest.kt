@@ -3,6 +3,8 @@ package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 import com.intellij.testFramework.UsefulTestCase
 
 class TraverseFieldsKtTest : UsefulTestCase() {
+    private val namespace = "com.github.dazzbourgh.avroschemagenerator.domain.traverse"
+
     private val getType = GetType<Class<*>> {
         when (simpleName) {
             "boolean" -> BooleanType
@@ -48,7 +50,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(BooleanElement("b", Nullable)),
             Nullable
@@ -62,7 +64,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(ByteElement("b", Nullable)),
             Nullable
@@ -76,7 +78,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(IntElement("i", Nullable)),
             Nullable
@@ -90,7 +92,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(LongElement("l", Nullable)),
             Nullable
@@ -104,7 +106,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(DoubleElement("d", Nullable)),
             Nullable
@@ -118,7 +120,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(StringElement("s", Nullable)),
             Nullable
@@ -133,12 +135,12 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(
                 ComplexElement(
                     "ChildTestClass",
-                    "com.github.dazzbourgh.avroschemagenerator.domain",
+                    namespace,
                     "c",
                     listOf(),
                     Nullable
@@ -155,7 +157,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
         val actual = runTest(TestClass::class.java)
         val expected = ComplexElement(
             "TestClass",
-            "com.github.dazzbourgh.avroschemagenerator.domain",
+            namespace,
             null,
             listOf(
                 StringElement("s", Repeated)

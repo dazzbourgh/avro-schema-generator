@@ -6,14 +6,11 @@
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.dazzbourgh.avroschemagenerator.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.dazzbourgh.avroschemagenerator.services.MyProjectService"/>
-    </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.dazzbourgh.avroschemagenerator.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <actions>
+        <action id="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
+                class="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
+                text="Create Avro Schema">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>

@@ -7,7 +7,7 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
     // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.1.6"
     // Gradle Changelog Plugin
@@ -122,6 +122,8 @@ tasks {
 }
 
 dependencies {
-    implementation("org.apache.avro:avro:1.11.0")
+    implementation("org.apache.avro:avro:1.11.0") {
+        exclude("org.slf4j", "slf4j-api")
+    }
     testImplementation("org.assertj:assertj-core:3.21.0")
 }

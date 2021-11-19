@@ -1,6 +1,7 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
-fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? = null): Element
+@Throws(IllegalArgumentException::class, NotImplementedError::class)
+fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? = null): ComplexElement
         where Traverse : GetNamespaceName<T>,
               Traverse : GetDocName<T>,
               Traverse : GetType<T>,
