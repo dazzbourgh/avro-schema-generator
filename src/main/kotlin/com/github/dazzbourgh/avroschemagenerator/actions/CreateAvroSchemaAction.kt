@@ -27,13 +27,12 @@ class CreateAvroSchemaAction : AnAction() {
                 traverse(clazz, PsiTraverseModule)
             } catch (e: Throwable) {
                 val project: Project? = event.getData(CommonDataKeys.PROJECT)
-                val message = """
-                            Unable to generate schema. Reason:
-                                $e
-                                ${e.message}
-                        """.trimIndent()
                 project?.also {
-                    ErrorDialog(message).show()
+                    ErrorDialog(
+                        "Unable to generate schema. Reason:",
+                        e.javaClass.name,
+                        e.message ?: ""
+                    ).show()
                 }
                 return
             }

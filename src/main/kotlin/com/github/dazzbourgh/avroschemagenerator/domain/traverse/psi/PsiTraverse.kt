@@ -32,6 +32,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isCollection
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isGeneric
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.mapBoxedType
+import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
@@ -61,7 +62,20 @@ object PsiTraverse {
                                     psiTypeElement.getLastDescendantOfType<PsiTypeElement>()!!.getPropertyType()
                                 }
                                 isGeneric(psiTypeElement) -> TODO("Generics are currently not supported")
-                                else -> ComplexType
+                                else -> {
+                                    val ref = with(PsiResolveElementReference) {
+                                        resolveElementReference()
+                                    }
+                                    when {
+                                        ref?.containingFile?.let { file ->
+                                            ProjectFileIndex.getInstance(file.project).isInSource(file.virtualFile)
+                                        } == true -> ComplexType
+                                        else -> throw IllegalArgumentException(
+                                            "Class fields are only supported for " +
+                                                    "classes in same module sources"
+                                        )
+                                    }
+                                }
                             }
                         }
                         else -> throw IllegalArgumentException()

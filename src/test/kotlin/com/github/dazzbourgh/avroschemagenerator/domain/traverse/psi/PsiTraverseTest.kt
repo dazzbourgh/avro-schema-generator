@@ -111,6 +111,43 @@ object PsiTraverseTest {
 
             assertThat(actual).containsExactlyElementsOf(expected)
         }
+
+        fun `test PsiGetType should throw for complex type interfaces`() {
+
+        }
+    }
+
+    internal class PsiGetTypeHeavyTest : HeavyPlatformTestCase() {
+        private lateinit var myFixture: JavaCodeInsightTestFixture
+        private lateinit var moduleFixture: ModuleFixture
+        private val testDataPath = "src/test/testData/traverse/psi/getType"
+
+        override fun setUp() {
+            val projectBuilder = JavaTestFixtureFactory.createFixtureBuilder(name)
+            myFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectBuilder.fixture)
+            myFixture.testDataPath = testDataPath
+
+            val projectBuilderWithModule = projectBuilder.addModule(JavaModuleFixtureBuilder::class.java)
+
+            moduleFixture = projectBuilderWithModule
+                .addContentRoot(testDataPath)
+                .addSourceRoot("")
+                .fixture
+
+            myFixture.setUp()
+        }
+
+        override fun tearDown() {
+            myFixture.tearDown()
+        }
+
+        fun `test PsiGetType should throw for complex type outside source root`() {
+            val clazz: PsiClass = myFixture.findClass("ClassWithComplexFieldOutsideSourceRoot")
+            val field = clazz.findFieldByName("is", false)!!
+
+            assertThatThrownBy { with(PsiGetType) { field.getPropertyType() } }
+                .isInstanceOf(IllegalArgumentException::class.java)
+        }
     }
 
     internal class PsiGetDocNameTest : LightJavaCodeInsightFixtureTestCase() {

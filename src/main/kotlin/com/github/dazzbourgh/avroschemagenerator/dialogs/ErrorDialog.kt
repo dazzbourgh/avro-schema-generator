@@ -7,7 +7,7 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-class ErrorDialog(private val message: String) : DialogWrapper(true) {
+class ErrorDialog(private vararg val messages: String) : DialogWrapper(true) {
     init {
         title = "Error"
         init()
@@ -15,10 +15,9 @@ class ErrorDialog(private val message: String) : DialogWrapper(true) {
 
     override fun createCenterPanel(): JComponent {
         val dialogPanel = JPanel(BorderLayout())
-
+        val message = "<html>${messages.joinToString("<br><br>")}</html>"
         val label = JLabel(message)
         dialogPanel.add(label, BorderLayout.CENTER)
-
         return dialogPanel
     }
 
