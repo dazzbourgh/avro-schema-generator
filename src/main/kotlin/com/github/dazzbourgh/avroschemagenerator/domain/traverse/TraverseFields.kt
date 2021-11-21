@@ -1,7 +1,12 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
 @Throws(IllegalArgumentException::class, NotImplementedError::class)
-fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? = null): ComplexElement
+fun <T, Traverse> traverse(
+    element: T,
+    traverse: Traverse,
+    elementName: String? = null,
+    mode: Mode = NonNull
+): ComplexElement
         where Traverse : GetNamespaceName<T>,
               Traverse : GetDocName<T>,
               Traverse : GetType<T>,
@@ -11,27 +16,27 @@ fun <T, Traverse> traverse(element: T, traverse: Traverse, elementName: String? 
               Traverse : GetMode<T>,
               Traverse : ResolveElementReference<T> =
     with(traverse) {
-        val getComplexElement =
-            { name: String, field: T ->
-                traverse(
-                    field.resolveElementReference() ?: TODO("References must resolve to non-null object"),
-                    traverse,
-                    name
-                )
-            }
-
         val docName = element.getDocName()
         val namespace = element.getNamespaceName()
         val fields = element.getProperties()
         val fieldNames = element.getPropertyNames()
-        val mode = element.getMode()
 
         val elements = fieldNames.zip(fields).map { (name, field) ->
             val type = field.getPropertyType()
             val fieldMode = field.getMode()
             when (type) {
                 is PrimitiveType -> getPrimitiveElement(name, type, fieldMode)
-                ComplexType -> getComplexElement(name, field)
+                ComplexType ->
+                    traverse(
+                        field.resolveElementReference()
+                            ?: throw NoSuchElementException(
+                                """References must resolve to non-null object, however, field didn't resolve to anything: 
+                                |   $field""".trimMargin()
+                            ),
+                        traverse,
+                        name,
+                        fieldMode
+                    )
             }
         }
 

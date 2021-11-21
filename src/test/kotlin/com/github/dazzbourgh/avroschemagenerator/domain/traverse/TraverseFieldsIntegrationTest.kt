@@ -35,10 +35,10 @@ internal class TraverseFieldsIntegrationTest : HeavyPlatformTestCase() {
     }
 
     fun `test traverseFields should correctly build complex element from a Java class`() {
-        val clazz: PsiElement = myFixture.findClass("TypesTestClass")
+        val clazz: PsiElement = myFixture.javaFacade.findClass("TypesIntegrationTestClass")
 
         val actual = traverse(clazz, PsiTraverseModule)
 
-        assertThat(actual).isEqualTo(complexElement)
+        assertThat(actual).isEqualTo(complexElement.copy(docName = "TypesIntegrationTestClass"))
     }
 }

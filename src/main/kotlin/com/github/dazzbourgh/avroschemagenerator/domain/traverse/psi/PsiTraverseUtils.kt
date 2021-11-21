@@ -1,14 +1,13 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi
 
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.PrimitiveType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ResolveElementReference
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiField
 import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiReferenceParameterList
 import com.intellij.psi.PsiTypeElement
-import com.intellij.psi.impl.source.PsiClassReferenceType
 import com.intellij.psi.util.PsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
@@ -58,13 +57,6 @@ object PsiTraverseUtils {
         return childrenQueue.reversed().firstOrNull { it is T } as T?
     }
 
-    internal fun mapBoxedType(
-        psiType: PsiClassReferenceType,
-        primitiveTypeSupplier: (ClassName) -> PrimitiveType?
-    ): PrimitiveType =
-        primitiveTypeSupplier(psiType.className)
-            ?: throw IllegalArgumentException("Only boxed primitive types and String are supported")
-
     internal fun isGeneric(psiTypeElement: PsiTypeElement): Boolean =
         (psiTypeElement
             .getChildOfType<PsiJavaCodeReferenceElement>()
@@ -78,9 +70,10 @@ object PsiTraverseUtils {
                 PsiUtil.getPackageName(this)?.contains("java.util") == true
                         && extends("Collection")
             is PsiTypeElement -> with(resolveElementReference) { resolveElementReference()?.isCollection() ?: false }
-            else -> TODO()
+            is PsiField -> getFirstDescendantOfType<PsiTypeElement>()?.isCollection()!!
+            else -> throw IllegalArgumentException("Cannot check if ${this.text} is a Collection")
         }
 
-    fun PsiClass.extends(parentClassName: String): Boolean =
+    private fun PsiClass.extends(parentClassName: String): Boolean =
         extendsList?.referenceElements?.mapNotNull { it.referenceName }?.any { it == parentClassName } ?: false
 }

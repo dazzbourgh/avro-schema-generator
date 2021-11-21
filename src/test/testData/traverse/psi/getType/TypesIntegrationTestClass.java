@@ -1,8 +1,12 @@
 import java.lang.Integer;
 import java.lang.String;
 import java.util.List;
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
-public class ResolveElementClass {
+public class TypesIntegrationTestClass {
     private byte bytePrimitive;
     private short shortPrimitive;
     private int integerPrimitive;
@@ -23,8 +27,14 @@ public class ResolveElementClass {
 
     private String string;
 
+    private BigInteger bigInteger;
+    private BigDecimal bigDecimal;
+    private LocalDateTime localDateTime;
+    private Date date;
+
     private int[] arr;
     private List<Integer> list;
-    private <caret>SomeTestClass someTestClass;
+
+    private SomeTestClass someTestClass;
     private List<SomeTestClass> someTestClassList;
 }

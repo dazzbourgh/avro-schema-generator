@@ -53,7 +53,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(BooleanElement("b", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -67,7 +67,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(ByteElement("b", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -81,7 +81,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(IntElement("i", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -95,7 +95,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(LongElement("l", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -109,7 +109,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(DoubleElement("d", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -123,7 +123,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             namespace,
             null,
             listOf(StringElement("s", Nullable)),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -146,7 +146,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                     Nullable
                 )
             ),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }
@@ -162,7 +162,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             listOf(
                 StringElement("s", Repeated)
             ),
-            Nullable
+            NonNull
         )
         assertEquals(expected, actual)
     }

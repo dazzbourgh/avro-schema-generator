@@ -31,7 +31,6 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getLastDescendantOfType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isCollection
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.isGeneric
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.mapBoxedType
 import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
@@ -57,7 +56,7 @@ object PsiTraverse {
                         is PsiPrimitiveType -> mapPrimitiveType(descendantType)
                         is PsiArrayType -> mapPrimitiveType(psiTypeElement.getLastDescendantOfType<PsiTypeElement>()!!.type)
                         is PsiClassReferenceType -> when {
-                            boxedTypeNames.contains(descendantType.name) -> mapBoxedType(descendantType) { boxedTypesMap[it] }
+                            boxedTypeNames.contains(descendantType.name) -> boxedTypesMap[descendantType.name]!!
                             else -> when {
                                 isGeneric(psiTypeElement) && psiTypeElement.isCollection() -> with(PsiGetType) {
                                     psiTypeElement.getLastDescendantOfType<PsiTypeElement>()!!.getPropertyType()
@@ -84,7 +83,7 @@ object PsiTraverse {
                 }
                 is PsiTypeElement -> when (val t = type) {
                     is PsiPrimitiveType -> mapPrimitiveType(t)
-                    is PsiClassReferenceType -> mapBoxedType(t) { boxedTypesMap[it] }
+                    is PsiClassReferenceType -> boxedTypesMap[t.className] ?: ComplexType
                     else -> throw IllegalArgumentException(
                         "Only PsiPrimitiveType and PsiClassReferenceType can be " +
                                 "mapped to a type, received ${this::class.java} instead"
@@ -135,7 +134,7 @@ object PsiTraverse {
             getChildrenOfType<PsiField>().toList().map { it.name }
     }
 
-    class PsiGetMode(private val getType: GetType<PsiElement>) : GetMode<PsiElement> {
+    object PsiGetMode : GetMode<PsiElement> {
         override fun PsiElement.getMode(): Mode =
             when (this) {
                 is PsiClass -> if (isCollection()) Repeated else Nullable
@@ -162,6 +161,10 @@ object PsiTraverse {
     object PsiResolveElementReference : ResolveElementReference<PsiElement> {
         override fun PsiElement.resolveElementReference(): PsiElement? =
             when (this) {
+                is PsiField -> when {
+                    isCollection() -> getLastDescendantOfType()
+                    else -> getFirstDescendantOfType<PsiJavaCodeReferenceElement>()
+                }?.resolveElementReference()
                 is PsiJavaCodeReferenceElement -> resolve()
                 else -> with(PsiResolveElementReference) {
                     getFirstDescendantOfType<PsiJavaCodeReferenceElement>()
@@ -176,7 +179,7 @@ object PsiTraverse {
         PsiGetNamespaceName,
         PsiGetProperties,
         PsiGetPropertyNames,
-        PsiGetMode(PsiGetType),
+        PsiGetMode,
         PsiResolveElementReference
     )
 

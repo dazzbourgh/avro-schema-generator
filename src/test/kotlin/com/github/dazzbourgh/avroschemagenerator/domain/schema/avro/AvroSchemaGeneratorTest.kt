@@ -10,6 +10,7 @@ internal class AvroSchemaGeneratorTest {
     @Test
     fun `generateSchema should create valid avro schema from Element`() {
         val input = complexElement
+        //@formatter:off
         val expected = SchemaBuilder.record("TypesTestClass")
             .namespace("")
             .fields()
@@ -41,11 +42,15 @@ internal class AvroSchemaGeneratorTest {
             .name("arr").type().array().items().intType().noDefault()
             .name("list").type().array().items().intType().noDefault()
             //----------------
-            .name("someTestClass").type().record("SomeTestClass").namespace("")
-            .fields().name("field").type().nullable().stringType().noDefault()
+            .name("someTestClass")
+                .type().record("SomeTestClass").namespace("").fields()
+                    .name("field").type().nullable().stringType().noDefault()
             .endRecord()
             .noDefault()
+            .name("someTestClassList")
+                .type().array().items().type("SomeTestClass").noDefault()
             .endRecord()
+        //@formatter:on
 
         val actual = generateSchema(input)
 

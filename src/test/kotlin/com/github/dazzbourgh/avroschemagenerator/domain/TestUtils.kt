@@ -57,8 +57,17 @@ object TestUtils {
                         StringElement("field", Nullable)
                     ),
                     Nullable
+                ),
+                ComplexElement(
+                    "SomeTestClass",
+                    "",
+                    "someTestClassList",
+                    listOf(
+                        StringElement("field", Nullable)
+                    ),
+                    Repeated
                 )
             ),
-            Nullable
+            NonNull
         )
 }
