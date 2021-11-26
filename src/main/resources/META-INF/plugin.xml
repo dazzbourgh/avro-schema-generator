@@ -10,7 +10,7 @@
         <action id="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
                 class="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
                 text="Create Avro Schema">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

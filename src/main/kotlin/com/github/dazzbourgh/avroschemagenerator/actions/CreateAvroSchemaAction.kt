@@ -7,6 +7,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.traverse
 import com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify.AvroSchemaStringify
 import com.intellij.designer.clipboard.SimpleTransferable
+import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -42,5 +43,10 @@ class CreateAvroSchemaAction : AnAction() {
             CopyPasteManager.getInstance().setContents(transferable)
             SuccessDialog().show()
         }
+    }
+
+    override fun update(e: AnActionEvent) {
+        val psiFile = e.getData(CommonDataKeys.PSI_FILE)
+        e.presentation.isVisible = psiFile?.fileType is JavaFileType
     }
 }
