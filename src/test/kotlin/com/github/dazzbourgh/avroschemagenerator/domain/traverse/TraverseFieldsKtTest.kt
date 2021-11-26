@@ -3,6 +3,10 @@ package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 import com.intellij.testFramework.UsefulTestCase
 
 class TraverseFieldsKtTest : UsefulTestCase() {
+    enum class EnumClass {
+        ONE, TWO
+    }
+
     private val namespace = "com.github.dazzbourgh.avroschemagenerator.domain.traverse"
 
     private val getType = GetType<Class<*>> {
@@ -14,7 +18,7 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             "String" -> StringType
             "double" -> DoubleType
             "Set", "List" -> StringType
-            else -> ComplexType
+            else -> if (simpleName.contains("EnumClass")) EnumType else ComplexType
         }
     }
     private val getDocName = GetDocName<Class<*>> { simpleName }
@@ -27,7 +31,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             else -> Nullable
         }
     }
-    private val resolveElementReference = ResolveElementReference<Class<*>> { this }
+    private val getElementDeclaration = GetElementDeclaration<Class<*>> { this }
+    private val getEnumValues = GetEnumValues<Class<*>> { EnumClass.values().map { it.name } }
 
     val runTest = { clazz: Class<*> ->
         traverse(
@@ -39,7 +44,8 @@ class TraverseFieldsKtTest : UsefulTestCase() {
                 getProperties,
                 getPropertyNames,
                 getMode,
-                resolveElementReference
+                getElementDeclaration,
+                getEnumValues
             )
         )
     }
@@ -161,6 +167,28 @@ class TraverseFieldsKtTest : UsefulTestCase() {
             null,
             listOf(
                 StringElement("s", Repeated)
+            ),
+            NonNull
+        )
+        assertEquals(expected, actual)
+    }
+
+    fun `test traverseFields should support enum types`() {
+        data class TestClass(val e: EnumClass)
+
+        val actual = runTest(TestClass::class.java)
+        val expected = ComplexElement(
+            "TestClass",
+            namespace,
+            null,
+            listOf(
+                EnumElement(
+                    "EnumClass",
+                    "com.github.dazzbourgh.avroschemagenerator.domain.traverse",
+                    "e",
+                    listOf("ONE", "TWO"),
+                    Nullable
+                )
             ),
             NonNull
         )

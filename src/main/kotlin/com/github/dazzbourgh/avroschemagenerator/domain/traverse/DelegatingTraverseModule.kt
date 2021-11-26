@@ -7,11 +7,13 @@ class DelegatingTraverseModule<T>(
     getProperties: GetProperties<T>,
     getPropertyNames: GetPropertyNames<T>,
     getMode: GetMode<T>,
-    resolveElementReference: ResolveElementReference<T>
+    getElementDeclaration: GetElementDeclaration<T>,
+    getEnumValues: GetEnumValues<T>
 ) : GetType<T> by getType,
     GetDocName<T> by getDocName,
     GetNamespaceName<T> by getNamespaceName,
     GetProperties<T> by getProperties,
     GetPropertyNames<T> by getPropertyNames,
     GetMode<T> by getMode,
-    ResolveElementReference<T> by resolveElementReference
+    GetElementDeclaration<T> by getElementDeclaration,
+    GetEnumValues<T> by getEnumValues

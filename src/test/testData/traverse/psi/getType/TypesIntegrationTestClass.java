@@ -37,4 +37,7 @@ public class TypesIntegrationTestClass {
 
     private SomeTestClass someTestClass;
     private List<SomeTestClass> someTestClassList;
+
+    private TestEnum testEnum;
+    private List<TestEnum> testEnumSet;
 }

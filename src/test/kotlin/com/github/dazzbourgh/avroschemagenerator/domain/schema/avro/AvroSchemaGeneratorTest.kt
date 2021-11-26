@@ -49,6 +49,11 @@ internal class AvroSchemaGeneratorTest {
             .noDefault()
             .name("someTestClassList")
                 .type().array().items().type("SomeTestClass").noDefault()
+            .name("testEnum")
+                .type().enumeration("TestEnum").namespace("")
+                .symbols("ONE", "TWO").noDefault()
+            .name("testEnumSet")
+                .type().array().items().type("TestEnum").noDefault()
             .endRecord()
         //@formatter:on
 

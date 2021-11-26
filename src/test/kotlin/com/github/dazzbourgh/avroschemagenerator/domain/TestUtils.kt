@@ -5,6 +5,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ByteElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.EnumElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.IntElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.LongElement
@@ -66,7 +67,9 @@ object TestUtils {
                         StringElement("field", Nullable)
                     ),
                     Repeated
-                )
+                ),
+                EnumElement("TestEnum", "", "testEnum", listOf("ONE", "TWO"), Nullable),
+                EnumElement("TestEnum", "", "testEnumSet", listOf("ONE", "TWO"), Repeated)
             ),
             NonNull
         )

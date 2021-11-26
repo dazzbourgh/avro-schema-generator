@@ -3,9 +3,9 @@ package com.github.dazzbourgh.avroschemagenerator.actions
 import com.github.dazzbourgh.avroschemagenerator.dialogs.ErrorDialog
 import com.github.dazzbourgh.avroschemagenerator.dialogs.SuccessDialog
 import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaGenerator.generateSchema
-import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaStringify
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.traverse
+import com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify.AvroSchemaStringify
 import com.intellij.designer.clipboard.SimpleTransferable
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.openapi.actionSystem.AnAction

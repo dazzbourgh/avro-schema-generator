@@ -1,6 +1,5 @@
-package com.github.dazzbourgh.avroschemagenerator.domain.schema.avro
+package com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify
 
-import com.github.dazzbourgh.avroschemagenerator.misc.Stringify
 import org.apache.avro.Schema
 
 object AvroSchemaStringify : Stringify<Schema> {

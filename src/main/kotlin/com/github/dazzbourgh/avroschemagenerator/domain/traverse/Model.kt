@@ -14,6 +14,7 @@ object CharacterType : PrimitiveType()
 object StringType : PrimitiveType()
 
 object ComplexType : FieldType()
+object EnumType : FieldType()
 
 //--------------------------------
 
@@ -43,6 +44,14 @@ data class ComplexElement(
     val mode: Mode
 ) : Element()
 
+data class EnumElement(
+    val docName: String,
+    val namespace: String,
+    val name: String?,
+    val values: List<String>,
+    val mode: Mode
+) : PrimitiveElement()
+
 fun interface GetType<T> {
     fun T.getPropertyType(): FieldType
 }
@@ -67,8 +76,12 @@ fun interface GetMode<T> {
     fun T.getMode(): Mode
 }
 
-fun interface ResolveElementReference<T> {
-    fun T.resolveElementReference(): T?
+fun interface GetElementDeclaration<T> {
+    fun T.getElementDeclaration(): T?
+}
+
+fun interface GetEnumValues<T> {
+    fun T.getEnumValues(): List<String>
 }
 
 val boxedTypeNames = listOf(

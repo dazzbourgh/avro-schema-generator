@@ -14,7 +14,8 @@ fun <T, Traverse> traverse(
               // TODO: add GetName interface for T instead
               Traverse : GetPropertyNames<T>,
               Traverse : GetMode<T>,
-              Traverse : ResolveElementReference<T> =
+              Traverse : GetElementDeclaration<T>,
+              Traverse : GetEnumValues<T> =
     with(traverse) {
         val docName = element.getDocName()
         val namespace = element.getNamespaceName()
@@ -28,7 +29,7 @@ fun <T, Traverse> traverse(
                 is PrimitiveType -> getPrimitiveElement(name, type, fieldMode)
                 ComplexType ->
                     traverse(
-                        field.resolveElementReference()
+                        field.getElementDeclaration()
                             ?: throw NoSuchElementException(
                                 """References must resolve to non-null object, however, field didn't resolve to anything: 
                                 |   $field""".trimMargin()
@@ -37,6 +38,13 @@ fun <T, Traverse> traverse(
                         name,
                         fieldMode
                     )
+                EnumType -> EnumElement(
+                    field.getDocName(),
+                    field.getNamespaceName(),
+                    name,
+                    field.getEnumValues(),
+                    fieldMode
+                )
             }
         }
 

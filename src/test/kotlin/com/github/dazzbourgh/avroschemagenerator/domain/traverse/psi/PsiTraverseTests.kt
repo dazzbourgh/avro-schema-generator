@@ -5,6 +5,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ByteType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.EnumType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.IntegerType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.LongType
@@ -14,12 +15,12 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Repeated
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ShortType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.StringType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetDocName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetElementDeclaration
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetMode
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetNamespaceName
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetProperties
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetPropertyNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetType
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getFirstDescendantOfType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiField
@@ -40,7 +41,7 @@ internal class PsiGetTypeTest : LightJavaCodeInsightFixtureTestCase() {
 
     override fun setUp() {
         super.setUp()
-        myFixture.configureByFiles("TypesTestClass.java", "SomeTestClass.java")
+        myFixture.configureByFiles("TypesTestClass.java", "SomeTestClass.java", "TestEnum.java")
     }
 
     fun `test PsiGetType should support all primitive types`() {
@@ -142,6 +143,14 @@ internal class PsiGetTypeTest : LightJavaCodeInsightFixtureTestCase() {
 
         assertThat(actual).containsExactlyElementsOf(expected)
     }
+
+    fun `test PsiGetType should support enum types for base classes`() {
+        val clazz: PsiClass = myFixture.javaFacade.findClass("TestEnum")
+
+        val actual = with(PsiGetType) { clazz.getPropertyType() }
+
+        assertThat(actual).isEqualTo(EnumType)
+    }
 }
 
 internal class PsiGetTypeHeavyTest : HeavyPlatformTestCase() {
@@ -182,6 +191,15 @@ internal class PsiGetTypeHeavyTest : HeavyPlatformTestCase() {
 
         assertThatThrownBy { with(PsiGetType) { field.getPropertyType() } }
             .isInstanceOf(IllegalArgumentException::class.java)
+    }
+
+    fun `test PsiGetType should support enum types for fields`() {
+        val clazz: PsiClass = myFixture.javaFacade.findClass("TypesTestClass")
+        val field = clazz.findFieldByName("testEnum", false)!!
+
+        val actual = with(PsiGetType) { field.getPropertyType() }
+
+        assertThat(actual).isEqualTo(EnumType)
     }
 }
 
@@ -332,7 +350,7 @@ internal class PsiGetModeHeavyTest : HeavyPlatformTestCase() {
     }
 }
 
-internal class PsiResolveElementReferenceTest : LightJavaCodeInsightFixtureTestCase() {
+internal class PsiGetElementDeclarationTest : LightJavaCodeInsightFixtureTestCase() {
     override fun getTestDataPath() = "src/test/testData/traverse/psi/getType"
 
     override fun setUp() {
@@ -343,7 +361,7 @@ internal class PsiResolveElementReferenceTest : LightJavaCodeInsightFixtureTestC
     fun `test PsiResolveElementReference should resolve PsiJavaCodeReferenceElement elements to their declaring PsiElement`() {
         val ref =
             myFixture.getReferenceAtCaretPositionWithAssertion("ResolveElementClass.java") as PsiJavaCodeReferenceElement
-        val actual = with(PsiResolveElementReference) { ref.resolveElementReference() }!!
+        val actual = with(PsiGetElementDeclaration) { ref.getElementDeclaration() }!!
 
         assertThat(actual).isInstanceOf(PsiClass::class.java)
         assertThat((actual as PsiClass).name).isEqualTo("SomeTestClass")
@@ -352,7 +370,7 @@ internal class PsiResolveElementReferenceTest : LightJavaCodeInsightFixtureTestC
     fun `test PsiResolveElementReference should resolve fields containing PsiJavaCodeReferenceElement to their declaring PsiElement`() {
         val clazz: PsiClass = file.getChildOfType()!!
         val field = clazz.findFieldByName("someTestClass", false)!!
-        val actual = with(PsiResolveElementReference) { field.resolveElementReference() }
+        val actual = with(PsiGetElementDeclaration) { field.getElementDeclaration() }
 
         assertThat(actual).isInstanceOf(PsiClass::class.java)
         assertThat((actual as PsiClass).name).isEqualTo("SomeTestClass")
@@ -361,13 +379,13 @@ internal class PsiResolveElementReferenceTest : LightJavaCodeInsightFixtureTestC
     fun `test PsiResolveElementReference should not resolve elements not containing PsiJavaCodeReferenceElement to their declaring PsiElement`() {
         val clazz: PsiClass = file.getChildOfType()!!
         val field = clazz.getFirstDescendantOfType<PsiKeyword>()!!
-        val actual = with(PsiResolveElementReference) { field.resolveElementReference() }
+        val actual = with(PsiGetElementDeclaration) { field.getElementDeclaration() }
 
         assertThat(actual).isNull()
     }
 }
 
-internal class PsiResolveElementReferenceHeavyTest : HeavyPlatformTestCase() {
+internal class PsiGetElementDeclarationHeavyTest : HeavyPlatformTestCase() {
     private lateinit var myFixture: JavaCodeInsightTestFixture
     private lateinit var moduleFixture: ModuleFixture
     private val testDataPath = "src/test/testData/traverse/psi/getType"
@@ -394,7 +412,7 @@ internal class PsiResolveElementReferenceHeavyTest : HeavyPlatformTestCase() {
     fun `test PsiResolveElementReference should resolve repeated fields containing complex types to the declaring PsiElement of that complex type`() {
         val clazz: PsiClass = myFixture.findClass("ResolveElementClass")
         val field = clazz.findFieldByName("someTestClassList", false)!!
-        val actual = with(PsiResolveElementReference) { field.resolveElementReference() }
+        val actual = with(PsiGetElementDeclaration) { field.getElementDeclaration() }
 
         assertThat(actual).isInstanceOf(PsiClass::class.java)
         assertThat((actual as PsiClass).name).isEqualTo("SomeTestClass")

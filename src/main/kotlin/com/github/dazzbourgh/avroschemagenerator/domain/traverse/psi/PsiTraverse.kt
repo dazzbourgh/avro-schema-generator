@@ -6,9 +6,12 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DelegatingTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.EnumType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FieldType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetDocName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetEnumValues
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetMode
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetNamespaceName
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetProperties
@@ -21,11 +24,10 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.NonNull
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Nullable
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.PrimitiveType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Repeated
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ResolveElementReference
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ShortType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.boxedTypeNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.boxedTypesMap
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference.resolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetElementDeclaration.getElementDeclaration
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getAllDescendantsOfType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getFirstDescendantOfType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverseUtils.getLastDescendantOfType
@@ -35,7 +37,9 @@ import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiEnumConstant
 import com.intellij.psi.PsiField
+import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
@@ -49,7 +53,7 @@ object PsiTraverse {
     object PsiGetType : GetType<PsiElement> {
         override fun PsiElement.getPropertyType(): FieldType =
             when (this) {
-                is PsiClass -> ComplexType
+                is PsiClass -> if (isEnum) EnumType else ComplexType
                 is PsiField -> {
                     val psiTypeElement = getFirstDescendantOfType<PsiTypeElement>()!!
                     when (val descendantType = psiTypeElement.type) {
@@ -63,8 +67,9 @@ object PsiTraverse {
                                 }
                                 isGeneric(psiTypeElement) -> TODO("Generics are currently not supported")
                                 else -> {
-                                    val ref = with(PsiResolveElementReference) { resolveElementReference() }
+                                    val ref = with(PsiGetElementDeclaration) { getElementDeclaration() }
                                     when {
+                                        ref is PsiClass && ref.isEnum -> EnumType
                                         ref?.let { it is PsiClassImpl && it.isInterface } == true ->
                                             throw IllegalArgumentException("Data classes cannot contain interface fields")
                                         ref?.containingFile?.let { file ->
@@ -83,7 +88,8 @@ object PsiTraverse {
                 }
                 is PsiTypeElement -> when (val t = type) {
                     is PsiPrimitiveType -> mapPrimitiveType(t)
-                    is PsiClassReferenceType -> boxedTypesMap[t.className] ?: ComplexType
+                    is PsiClassReferenceType -> boxedTypesMap[t.className]
+                        ?: with(PsiGetElementDeclaration) { getElementDeclaration()!!.getPropertyType() }
                     else -> throw IllegalArgumentException(
                         "Only PsiPrimitiveType and PsiClassReferenceType can be " +
                                 "mapped to a type, received ${this::class.java} instead"
@@ -112,7 +118,8 @@ object PsiTraverse {
         override fun PsiElement.getDocName(): String =
             when (this) {
                 is PsiClass -> name ?: throw IllegalArgumentException("Anonymous classes cannot have DocName")
-                else -> throw IllegalArgumentException("DocName is only defined for classes")
+                is PsiField -> resolveEnumAndGet { getDocName() }
+                else -> throw IllegalArgumentException("DocName is only defined for classes and enums")
             }
     }
 
@@ -120,6 +127,7 @@ object PsiTraverse {
         override fun PsiElement.getNamespaceName(): String =
             when (this) {
                 is PsiClass -> PsiUtil.getPackageName(this)!!
+                is PsiField -> resolveEnumAndGet { getNamespaceName() }
                 else -> throw IllegalArgumentException("Package name can only be obtained for a class")
             }
     }
@@ -145,7 +153,7 @@ object PsiTraverse {
                             else -> Repeated
                         }
                         else -> {
-                            val resolvedRef = ref.resolveElementReference()
+                            val resolvedRef = ref.getElementDeclaration()
                             when {
                                 resolvedRef == null -> Nullable
                                 resolvedRef.isCollection() -> Repeated
@@ -158,20 +166,38 @@ object PsiTraverse {
             }
     }
 
-    object PsiResolveElementReference : ResolveElementReference<PsiElement> {
-        override fun PsiElement.resolveElementReference(): PsiElement? =
+    object PsiGetElementDeclaration : GetElementDeclaration<PsiElement> {
+        override fun PsiElement.getElementDeclaration(): PsiElement? =
             when (this) {
                 is PsiField -> when {
                     isCollection() -> getLastDescendantOfType()
                     else -> getFirstDescendantOfType<PsiJavaCodeReferenceElement>()
-                }?.resolveElementReference()
+                }?.getElementDeclaration()
                 is PsiJavaCodeReferenceElement -> resolve()
-                else -> with(PsiResolveElementReference) {
+                else -> with(PsiGetElementDeclaration) {
                     getFirstDescendantOfType<PsiJavaCodeReferenceElement>()
-                        ?.resolveElementReference()
+                        ?.getElementDeclaration()
                 }
             }
     }
+
+    object PsiGetEnumValues : GetEnumValues<PsiElement> {
+        override fun PsiElement.getEnumValues(): List<String> =
+            when (this) {
+                is PsiClass -> getAllDescendantsOfType<PsiEnumConstant>()
+                    .map { it.getFirstDescendantOfType<PsiIdentifier>() }
+                    .mapNotNull { it?.text }
+                is PsiField -> resolveEnumAndGet { getEnumValues() }
+                else -> throw IllegalArgumentException("Enums must be of PsiClass type")
+            }
+    }
+
+    private fun <T> PsiField.resolveEnumAndGet(block: PsiClass.() -> T): T =
+        when (val resolved =
+            getLastDescendantOfType<PsiJavaCodeReferenceElement>()?.resolve()) {
+            is PsiClass -> resolved.block()
+            else -> throw IllegalArgumentException("Reference should only point to class or enum")
+        }
 
     private val module = DelegatingTraverseModule(
         PsiGetType,
@@ -180,7 +206,8 @@ object PsiTraverse {
         PsiGetProperties,
         PsiGetPropertyNames,
         PsiGetMode,
-        PsiResolveElementReference
+        PsiGetElementDeclaration,
+        PsiGetEnumValues
     )
 
     object PsiTraverseModule : GetType<PsiElement> by module,
@@ -189,5 +216,6 @@ object PsiTraverse {
         GetProperties<PsiElement> by module,
         GetPropertyNames<PsiElement> by module,
         GetMode<PsiElement> by module,
-        ResolveElementReference<PsiElement> by module
+        GetElementDeclaration<PsiElement> by module,
+        GetEnumValues<PsiElement> by module
 }

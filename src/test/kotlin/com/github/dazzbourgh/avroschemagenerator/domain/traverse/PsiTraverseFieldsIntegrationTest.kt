@@ -10,7 +10,7 @@ import com.intellij.testFramework.fixtures.JavaTestFixtureFactory
 import com.intellij.testFramework.fixtures.ModuleFixture
 import org.assertj.core.api.Assertions.assertThat
 
-internal class TraverseFieldsIntegrationTest : HeavyPlatformTestCase() {
+internal class PsiTraverseFieldsIntegrationTest : HeavyPlatformTestCase() {
     private lateinit var myFixture: JavaCodeInsightTestFixture
     private lateinit var moduleFixture: ModuleFixture
     private val testDataPath = "src/test/testData/traverse/psi/getType"
@@ -36,9 +36,10 @@ internal class TraverseFieldsIntegrationTest : HeavyPlatformTestCase() {
 
     fun `test traverseFields should correctly build complex element from a Java class`() {
         val clazz: PsiElement = myFixture.javaFacade.findClass("TypesIntegrationTestClass")
+        val expected = complexElement.copy(docName = "TypesIntegrationTestClass")
 
         val actual = traverse(clazz, PsiTraverseModule)
 
-        assertThat(actual).isEqualTo(complexElement.copy(docName = "TypesIntegrationTestClass"))
+        assertThat(actual).isEqualTo(expected)
     }
 }

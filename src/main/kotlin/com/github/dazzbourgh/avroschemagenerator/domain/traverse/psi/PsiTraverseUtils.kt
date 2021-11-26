@@ -1,7 +1,7 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi
 
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ResolveElementReference
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiResolveElementReference
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetElementDeclaration
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiField
@@ -64,12 +64,12 @@ object PsiTraverseUtils {
             ?.getChildrenOfType<PsiTypeElement>()
             ?.size ?: 0) > 0
 
-    fun PsiElement.isCollection(resolveElementReference: ResolveElementReference<PsiElement> = PsiResolveElementReference): Boolean =
+    fun PsiElement.isCollection(getElementDeclaration: GetElementDeclaration<PsiElement> = PsiGetElementDeclaration): Boolean =
         when (this) {
             is PsiClass ->
                 PsiUtil.getPackageName(this)?.contains("java.util") == true
                         && extends("Collection")
-            is PsiTypeElement -> with(resolveElementReference) { resolveElementReference()?.isCollection() ?: false }
+            is PsiTypeElement -> with(getElementDeclaration) { getElementDeclaration()?.isCollection() ?: false }
             is PsiField -> getFirstDescendantOfType<PsiTypeElement>()?.isCollection()!!
             else -> throw IllegalArgumentException("Cannot check if ${this.text} is a Collection")
         }

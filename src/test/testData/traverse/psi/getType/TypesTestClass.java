@@ -36,4 +36,5 @@ public class TypesTestClass {
     private List<Integer> list;
 
     private SomeTestClass someTestClass;
+    private TestEnum testEnum;
 }

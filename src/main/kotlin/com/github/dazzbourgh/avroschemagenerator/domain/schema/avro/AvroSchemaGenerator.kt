@@ -6,6 +6,7 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterElemen
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Element
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.EnumElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.IntElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.LongElement
@@ -96,6 +97,20 @@ object AvroSchemaGenerator {
                     builder = when (el.mode) {
                         Repeated -> builder.name(el.name).type().array().items().type(schema).noDefault()
                         else -> builder.name(el.name).type(schema).noDefault()
+                    }
+                }
+                is EnumElement -> {
+                    val enumSchema = SchemaBuilder.builder()
+                        .enumeration(el.docName)
+                        .namespace(el.namespace)
+                        .symbols(*el.values.toTypedArray())
+                    builder = when (el.mode) {
+                        Repeated -> builder.name(el.name).type().array().items().type(enumSchema).noDefault()
+                        else -> {
+                            builder.name(el.name)
+                                .type(enumSchema)
+                                .noDefault()
+                        }
                     }
                 }
             }
