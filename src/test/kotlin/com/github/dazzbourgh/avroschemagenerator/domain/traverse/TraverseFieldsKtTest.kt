@@ -1,5 +1,33 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.BooleanElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.BooleanType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ByteElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ByteType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ComplexElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ComplexType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.DoubleElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.DoubleType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.EnumElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.EnumType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.IntElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.IntegerType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.LongElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.LongType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.NonNull
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Nullable
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Repeated
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.StringElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.StringType
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.modules.DelegatingTraverseModule
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetDocName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetEnumValues
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetMode
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetNamespaceName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetProperties
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetPropertyNames
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetType
 import com.intellij.testFramework.UsefulTestCase
 
 class TraverseFieldsKtTest : UsefulTestCase() {

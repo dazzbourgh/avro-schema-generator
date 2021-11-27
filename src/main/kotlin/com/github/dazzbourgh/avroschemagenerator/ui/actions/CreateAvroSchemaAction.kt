@@ -1,11 +1,11 @@
-package com.github.dazzbourgh.avroschemagenerator.actions
+package com.github.dazzbourgh.avroschemagenerator.ui.actions
 
-import com.github.dazzbourgh.avroschemagenerator.dialogs.ErrorDialog
-import com.github.dazzbourgh.avroschemagenerator.dialogs.SuccessDialog
 import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaGenerator.generateSchema
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.traverse
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify.AvroSchemaStringify
+import com.github.dazzbourgh.avroschemagenerator.ui.dialogs.ErrorDialog
+import com.github.dazzbourgh.avroschemagenerator.ui.dialogs.SuccessDialog
 import com.intellij.designer.clipboard.SimpleTransferable
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.lang.java.JavaLanguage
@@ -17,7 +17,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
 import java.awt.datatransfer.DataFlavor
-
 
 class CreateAvroSchemaAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {

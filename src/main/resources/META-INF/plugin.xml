@@ -7,8 +7,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
     <actions>
-        <action id="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
-                class="com.github.dazzbourgh.avroschemagenerator.actions.CreateAvroSchemaAction"
+        <action id="com.github.dazzbourgh.avroschemagenerator.ui.actions.CreateAvroSchemaAction"
+                class="com.github.dazzbourgh.avroschemagenerator.ui.actions.CreateAvroSchemaAction"
                 text="Create Avro Schema">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>

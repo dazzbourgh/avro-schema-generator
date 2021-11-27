@@ -1,4 +1,4 @@
-package com.github.dazzbourgh.avroschemagenerator.dialogs
+package com.github.dazzbourgh.avroschemagenerator.ui.dialogs
 
 import com.intellij.openapi.ui.DialogWrapper
 import java.awt.BorderLayout

@@ -1,7 +1,7 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse
 
 import com.github.dazzbourgh.avroschemagenerator.domain.TestUtils.complexElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiTraverseModule
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiTraverseModule
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.HeavyPlatformTestCase
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder

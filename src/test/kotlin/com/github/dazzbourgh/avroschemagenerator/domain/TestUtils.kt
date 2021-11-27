@@ -1,19 +1,19 @@
 package com.github.dazzbourgh.avroschemagenerator.domain
 
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.BooleanElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ByteElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.CharacterElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ComplexElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.DoubleElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.EnumElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.FloatElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.IntElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.LongElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.NonNull
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Nullable
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.Repeated
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.ShortElement
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.StringElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.BooleanElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ByteElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.CharacterElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ComplexElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.DoubleElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.EnumElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.FloatElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.IntElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.LongElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.NonNull
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Nullable
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Repeated
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ShortElement
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.StringElement
 
 object TestUtils {
     val complexElement =

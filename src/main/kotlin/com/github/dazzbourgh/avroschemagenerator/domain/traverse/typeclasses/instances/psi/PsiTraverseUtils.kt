@@ -1,7 +1,7 @@
-package com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi
+package com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi
 
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.GetElementDeclaration
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.psi.PsiTraverse.PsiGetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetElementDeclaration
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiField
@@ -12,8 +12,6 @@ import com.intellij.psi.util.PsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import java.util.*
-
-typealias ClassName = String
 
 object PsiTraverseUtils {
     internal inline fun <reified T : PsiElement> PsiElement.getAllDescendantsOfType(): List<T> {
@@ -30,9 +28,6 @@ object PsiTraverseUtils {
 
     internal inline fun <reified T : PsiElement> PsiElement.getFirstDescendantOfType(): T? =
         search(this) { it.children.toList() }
-
-    internal inline fun <reified T : PsiElement> PsiElement.getFirstAscendantOfType(): T? =
-        search(this) { listOf(it.parent) }
 
     private inline fun <reified T : S, reified S> search(element: S, getNextElements: (S) -> Iterable<S>): T? {
         val queue: Queue<S> = LinkedList()
