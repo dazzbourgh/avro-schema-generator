@@ -18,7 +18,6 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Repeated
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ShortType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.boxedTypeNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.boxedTypesMap
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.modules.DelegatingTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetDocName
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetElementDeclaration
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetEnumValues
@@ -198,24 +197,4 @@ object PsiTraverse {
             is PsiClass -> resolved.block()
             else -> throw IllegalArgumentException("Reference should only point to class or enum")
         }
-
-    private val module = DelegatingTraverseModule(
-        PsiGetType,
-        PsiGetDocName,
-        PsiGetNamespaceName,
-        PsiGetProperties,
-        PsiGetPropertyNames,
-        PsiGetMode,
-        PsiGetElementDeclaration,
-        PsiGetEnumValues
-    )
-
-    object PsiTraverseModule : GetType<PsiElement> by module,
-        GetDocName<PsiElement> by module,
-        GetNamespaceName<PsiElement> by module,
-        GetProperties<PsiElement> by module,
-        GetPropertyNames<PsiElement> by module,
-        GetMode<PsiElement> by module,
-        GetElementDeclaration<PsiElement> by module,
-        GetEnumValues<PsiElement> by module
 }

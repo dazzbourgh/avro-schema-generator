@@ -1,8 +1,8 @@
 package com.github.dazzbourgh.avroschemagenerator.ui.actions
 
 import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaGenerator.generateSchema
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.modules.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.traverse
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify.AvroSchemaStringify
 import com.github.dazzbourgh.avroschemagenerator.ui.dialogs.ErrorDialog
 import com.github.dazzbourgh.avroschemagenerator.ui.dialogs.SuccessDialog

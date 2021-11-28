@@ -1,5 +1,7 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse.model
 
+// Data classes representing traversal results for elements.
+
 sealed class Element
 sealed class PrimitiveElement : Element()
 data class BooleanElement(val name: String, val mode: Mode) : PrimitiveElement()

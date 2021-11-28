@@ -35,6 +35,20 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.Get
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetPropertyNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetType
 
+/**
+ * Traverses selected parent element and all its fields recursively to build typed structure that can then be
+ * transformed to a schema.
+ *
+ * @param T generic element type that can be traversed.
+ * @param Traverse alias for a module type that contains all required dependencies to traverse [T].
+ * @param element generic element to be traversed.
+ * @param traverse module with all required dependencies.
+ * @param elementName name of the element to be traversed. Normally traversal starts with a top level structure (class),
+ * which does not have an [elementName], because [elementName] is only defined for fields of a structure.
+ * @param mode a [Mode] for the element to be traversed. For top level structure default is [NonNull].
+ * @return an instance of [com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Element] that can be used to
+ * create a specific schema.
+ */
 @Throws(IllegalArgumentException::class, NotImplementedError::class)
 fun <T, Traverse> traverse(
     element: T,

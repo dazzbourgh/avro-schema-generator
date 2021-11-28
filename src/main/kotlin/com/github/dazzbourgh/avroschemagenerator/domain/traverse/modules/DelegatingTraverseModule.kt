@@ -9,6 +9,20 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.Get
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetPropertyNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetType
 
+/**
+ * A module that implements all typeclasses by delegation.
+ *
+ * @param T
+ *
+ * @param getType
+ * @param getDocName
+ * @param getNamespaceName
+ * @param getProperties
+ * @param getPropertyNames
+ * @param getMode
+ * @param getElementDeclaration
+ * @param getEnumValues
+ */
 class DelegatingTraverseModule<T>(
     getType: GetType<T>,
     getDocName: GetDocName<T>,
