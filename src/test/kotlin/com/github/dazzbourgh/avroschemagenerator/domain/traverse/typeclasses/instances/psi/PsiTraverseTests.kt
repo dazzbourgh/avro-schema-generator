@@ -14,13 +14,6 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Nullable
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.Repeated
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ShortType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.StringType
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetDocName
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetElementDeclaration
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetMode
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetNamespaceName
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetProperties
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetPropertyNames
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetType
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverseUtils.getFirstDescendantOfType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiField

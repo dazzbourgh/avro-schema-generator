@@ -1,7 +1,6 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi
 
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetElementDeclaration
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse.PsiGetElementDeclaration
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiField
@@ -71,4 +70,11 @@ object PsiTraverseUtils {
 
     private fun PsiClass.extends(parentClassName: String): Boolean =
         extendsList?.referenceElements?.mapNotNull { it.referenceName }?.any { it == parentClassName } ?: false
+
+    fun <T> PsiField.resolveEnumAndGet(block: PsiClass.() -> T): T =
+        when (val resolved =
+            getLastDescendantOfType<PsiJavaCodeReferenceElement>()?.resolve()) {
+            is PsiClass -> resolved.block()
+            else -> throw IllegalArgumentException("Reference should only point to class or enum")
+        }
 }

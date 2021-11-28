@@ -8,18 +8,25 @@ import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.Get
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetProperties
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetPropertyNames
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.GetType
-import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiTraverse
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetDocName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetElementDeclaration
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetEnumValues
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetMode
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetNamespaceName
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetProperties
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetPropertyNames
+import com.github.dazzbourgh.avroschemagenerator.domain.traverse.typeclasses.instances.psi.PsiGetType
 import com.intellij.psi.PsiElement
 
 private val module = DelegatingTraverseModule(
-    PsiTraverse.PsiGetType,
-    PsiTraverse.PsiGetDocName,
-    PsiTraverse.PsiGetNamespaceName,
-    PsiTraverse.PsiGetProperties,
-    PsiTraverse.PsiGetPropertyNames,
-    PsiTraverse.PsiGetMode,
-    PsiTraverse.PsiGetElementDeclaration,
-    PsiTraverse.PsiGetEnumValues
+    PsiGetType,
+    PsiGetDocName,
+    PsiGetNamespaceName,
+    PsiGetProperties,
+    PsiGetPropertyNames,
+    PsiGetMode,
+    PsiGetElementDeclaration,
+    PsiGetEnumValues
 )
 
 object PsiTraverseModule : GetType<PsiElement> by module,

@@ -57,7 +57,7 @@ internal class GenerateAvroSchemaTest {
             .endRecord()
         //@formatter:on
 
-        val actual = generateSchema(input)
+        val actual = input.generateSchema()
 
         assertThat(actual).isEqualTo(expected)
     }

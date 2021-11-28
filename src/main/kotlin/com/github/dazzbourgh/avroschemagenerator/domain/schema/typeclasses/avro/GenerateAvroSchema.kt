@@ -21,15 +21,15 @@ import org.apache.avro.SchemaBuilder
 import java.util.*
 
 object GenerateAvroSchema : GenerateSchema<Schema> {
-    override fun generateSchema(complexElement: ComplexElement): Schema {
-        val elements: Queue<Element> = LinkedList()
+    override fun ComplexElement.generateSchema(): Schema {
+        val elementQueue: Queue<Element> = LinkedList()
         var builder = SchemaBuilder.builder()
-            .record(complexElement.docName)
-            .namespace(complexElement.namespace)
+            .record(docName)
+            .namespace(namespace)
             .fields()
-        complexElement.elements.forEach { elements.add(it) }
-        while (elements.isNotEmpty()) {
-            when (val el = elements.remove()) {
+        elements.forEach { elementQueue.add(it) }
+        while (elementQueue.isNotEmpty()) {
+            when (val el = elementQueue.remove()) {
                 is BooleanElement -> {
                     builder = when (el.mode) {
                         NonNull -> builder.name(el.name).type().booleanType().noDefault()
@@ -94,7 +94,7 @@ object GenerateAvroSchema : GenerateSchema<Schema> {
                     }
                 }
                 is ComplexElement -> {
-                    val schema = generateSchema(el)
+                    val schema = el.generateSchema()
                     builder = when (el.mode) {
                         Repeated -> builder.name(el.name).type().array().items().type(schema).noDefault()
                         else -> builder.name(el.name).type(schema).noDefault()
