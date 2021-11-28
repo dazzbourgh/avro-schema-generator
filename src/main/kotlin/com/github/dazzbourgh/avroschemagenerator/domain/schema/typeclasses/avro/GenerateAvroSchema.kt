@@ -1,5 +1,6 @@
-package com.github.dazzbourgh.avroschemagenerator.domain.schema.avro
+package com.github.dazzbourgh.avroschemagenerator.domain.schema.typeclasses.avro
 
+import com.github.dazzbourgh.avroschemagenerator.domain.schema.typeclasses.GenerateSchema
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.BooleanElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.ByteElement
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.model.CharacterElement
@@ -19,14 +20,14 @@ import org.apache.avro.Schema
 import org.apache.avro.SchemaBuilder
 import java.util.*
 
-object AvroSchemaGenerator {
-    fun generateSchema(element: ComplexElement): Schema {
+object GenerateAvroSchema : GenerateSchema<Schema> {
+    override fun generateSchema(complexElement: ComplexElement): Schema {
         val elements: Queue<Element> = LinkedList()
         var builder = SchemaBuilder.builder()
-            .record(element.docName)
-            .namespace(element.namespace)
+            .record(complexElement.docName)
+            .namespace(complexElement.namespace)
             .fields()
-        element.elements.forEach { elements.add(it) }
+        complexElement.elements.forEach { elements.add(it) }
         while (elements.isNotEmpty()) {
             when (val el = elements.remove()) {
                 is BooleanElement -> {

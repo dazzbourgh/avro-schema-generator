@@ -1,12 +1,12 @@
 package com.github.dazzbourgh.avroschemagenerator.domain.schema.avro
 
 import com.github.dazzbourgh.avroschemagenerator.domain.TestUtils.complexElement
-import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaGenerator.generateSchema
+import com.github.dazzbourgh.avroschemagenerator.domain.schema.typeclasses.avro.GenerateAvroSchema.generateSchema
 import org.apache.avro.SchemaBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-internal class AvroSchemaGeneratorTest {
+internal class GenerateAvroSchemaTest {
     @Test
     fun `generateSchema should create valid avro schema from Element`() {
         val input = complexElement

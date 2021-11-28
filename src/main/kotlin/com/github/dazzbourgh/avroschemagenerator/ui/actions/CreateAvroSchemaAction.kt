@@ -1,6 +1,7 @@
 package com.github.dazzbourgh.avroschemagenerator.ui.actions
 
-import com.github.dazzbourgh.avroschemagenerator.domain.schema.avro.AvroSchemaGenerator.generateSchema
+import com.github.dazzbourgh.avroschemagenerator.domain.schema.module.SchemaGenerationModule
+import com.github.dazzbourgh.avroschemagenerator.domain.schema.typeclasses.avro.GenerateAvroSchema
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.modules.PsiTraverseModule
 import com.github.dazzbourgh.avroschemagenerator.domain.traverse.traverse
 import com.github.dazzbourgh.avroschemagenerator.misc.typeclasses.stringify.AvroSchemaStringify
@@ -23,8 +24,15 @@ class CreateAvroSchemaAction : AnAction() {
         val clazz: PsiClass? = event.getData(CommonDataKeys.PSI_FILE)?.let { (it as PsiJavaFile).classes[0] }
         val lang = event.getData(CommonDataKeys.PSI_FILE)?.language
         if (clazz != null && JavaLanguage.INSTANCE == lang) {
-            val element = try {
-                traverse(clazz, PsiTraverseModule)
+            try {
+                val element = traverse(clazz, PsiTraverseModule)
+                // This can be extracted to generate various schemas once support added.
+                val (generateSchema, stringify) = SchemaGenerationModule(GenerateAvroSchema, AvroSchemaStringify)
+                val schema = with(generateSchema) { element.generateSchema() }
+                val string = with(stringify) { schema.stringify() }
+                val transferable = SimpleTransferable(string, DataFlavor.stringFlavor)
+                CopyPasteManager.getInstance().setContents(transferable)
+                SuccessDialog().show()
             } catch (e: Throwable) {
                 val project: Project? = event.getData(CommonDataKeys.PROJECT)
                 project?.also {
@@ -34,13 +42,7 @@ class CreateAvroSchemaAction : AnAction() {
                         e.message ?: ""
                     ).show()
                 }
-                return
             }
-            val schema = generateSchema(element)
-            val string = with(AvroSchemaStringify) { schema.stringify() }
-            val transferable = SimpleTransferable(string, DataFlavor.stringFlavor)
-            CopyPasteManager.getInstance().setContents(transferable)
-            SuccessDialog().show()
         }
     }
 
